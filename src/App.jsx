@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Home from "./home";
 // Define the main App component
 function App() {
+  let data = ["8jefjes8328438", "8734hfh23"];
   // Initialize tasks state with a function that retrieves tasks from localStorage or sets a default task
   return (
     <>
@@ -22,9 +23,11 @@ function App() {
           </Link>
         </li>
         <li>
-          <Link to="/todo" target="blank">
-            Todo
-          </Link>
+          {data.map((item) => (
+            <Link to={`/todo/${item}`} target="blank">
+              Todo
+            </Link>
+          ))}
         </li>
       </ul>
       <Routes>
