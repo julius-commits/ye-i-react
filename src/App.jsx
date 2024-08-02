@@ -24,7 +24,7 @@ function App() {
         </li>
         <li>
           {data.map((item) => (
-            <Link to={`/todo/${item}`} target="blank">
+            <Link to="/todo" target="blank">
               Todo
             </Link>
           ))}
