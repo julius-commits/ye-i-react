@@ -1,118 +1,60 @@
+// Import the React library
 import React from "react";
+
+// Import the CSS file for styling
 import "./App.css";
+
+// Import the useEffect and useState hooks from React (unused in this file)
 import { useEffect, useState } from "react";
 
-function Todo() {
-  // create state for the tasks array
-  const [tasks, setTasks] = useState(
-    localStorage.getItem("tasks")
-      ? JSON.parse(localStorage.getItem("tasks"))
-      : []
-  );
-  // const [tasks, setTasks] = useState([]);
-  const [input, setInput] = useState("");
-  const [showEdit, setShowEdit] = useState(false);
-  const [editValue, setEditValue] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+// Import the Todo component from the todo.js file
+import Todo from "./todo";
 
-  let getTask = (e) => {
-    setInput(e.target.value);
-  };
-  const isEmptyOrWhitespace = (text) => {
-    const regex = /^\s*$/;
-    return regex.test(text);
-  };
+// Import necessary components and functions from react-router-dom for routing
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-  let pushTask = () => {
-    let newTask = { description: input, id: Math.random() };
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-    let data = [...tasks];
-    data.push(newTask);
-    localStorage.setItem("tasks", JSON.stringify(data));
-    setInput("");
-  };
+// Import the Home component from the home.js file
+import Home from "./home";
 
-  let addTask = () => {
-    if (!isEmptyOrWhitespace(input)) {
-      let IsNew = tasks.find((task) => task.description == input);
-      if (!IsNew) {
-        pushTask();
-      } else {
-        setShowModal(true);
-      }
-    } else {
-      // setShowModal(true);
-      alert("Empty task!!");
-    }
-  };
+// Define the main App component
+function App() {
+  // Define an array of data (unused in the component)
+  let data = ["8jefjes8328438", "8734hfh23"];
 
-  let deleteTask = (id) => {
-    // update local storage after delete
-    let data = [...tasks];
-    let updatedData = data.filter((item) => item.id != id);
-    localStorage.setItem("tasks", JSON.stringify(updatedData));
-    setTasks(updatedData);
-  };
-  let editTastk = () => {
-    let updateData = tasks.map((task) => {
-      if (task.id == selectedId) {
-        return { ...task, description: editValue };
-      } else {
-        return task;
-      }
-    });
-    localStorage.setItem("tasks", JSON.stringify(updateData));
-    setTasks(updateData);
-    setShowEdit(false);
-  };
-  // create the add function
-  // // in the add function we will push the new item to the tasks state
-  // create the update function
-  // adding the update function as onclick to each
+  // Return the JSX for the App component
   return (
     <>
-      {/* get the input from the user */}
+      {/* Navigation menu */}
+      <ul>
+        <li>
+          {/* Link to the Home page */}
+          <Link to="/" target="blank">
+            Home
+          </Link>
+        </li>
+        <li>
+          {/* Map through the data array to create multiple Todo links (inefficient, as it creates duplicate links) */}
+          {data.map((item) => (
+            <Link to="/todo" target="blank">
+              Todo
+            </Link>
+          ))}
+        </li>
+      </ul>
 
-      <input type="text" value={input} onChange={getTask} />
-      <button onClick={addTask}>Add</button>
-      {/* map through the tasks state to show it in the return */}
+      {/* Define routes for the application */}
+      <Routes>
+        {/* Route for the home page */}
+        <Route index element={<Home />} />
+        {/* Route for the todo page */}
+        <Route path="/todo" element={<Todo />} />
+      </Routes>
 
-      {tasks.map((item) => (
-        <div key={item.id}>
-          {showEdit && item.id == selectedId ? (
-            <input
-              type="text"
-              onChange={(e) => setEditValue(e.target.value)}
-              value={editValue}
-            />
-          ) : (
-            item.description
-          )}
-          <button
-            onClick={() => {
-              setEditValue(item.description);
-              setShowEdit(true);
-              setSelectedId(item.id);
-            }}
-          >
-            Edit
-          </button>
-          {showEdit ? <button onClick={editTastk}>Save</button> : null}
-          <button onClick={() => deleteTask(item.id)}>Delete</button>{" "}
-        </div>
-      ))}
-      {showModal ? (
-        <div className="overlay" onClick={() => setShowModal(false)}>
-          <div className="modal">
-            <p>Same Item!!!</p>
-            <button onClick={() => setShowModal(false)}>Cancel</button>
-            <button onClick={pushTask}>Ok</button>
-          </div>
-        </div>
-      ) : null}
+      {/* Footer */}
+      <footer>this is footer</footer>
     </>
   );
 }
 
-export default Todo;
+// Export the App component as the default export
+export default App;
